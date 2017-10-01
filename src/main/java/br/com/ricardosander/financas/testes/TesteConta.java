@@ -1,10 +1,9 @@
 package br.com.ricardosander.financas.testes;
 
 import br.com.ricardosander.financas.modelo.Conta;
+import br.com.ricardosander.financas.util.JPAUtil;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 public class TesteConta {
 
@@ -17,8 +16,7 @@ public class TesteConta {
         conta.setBanco("001");
         conta.setTitular("Ricardo");
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("financas");
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
 
         em.getTransaction().begin();
         em.persist(conta);//Passou a ser gerenciado pela JPA (Managed).
@@ -29,7 +27,7 @@ public class TesteConta {
         //Conta deixa de ser gerenciada pela JPA pois o EntityManager que a criou/buscou foi fechado (Detached).
         conta.setTitular("Ricardo Lopes");
 
-        em = emf.createEntityManager();
+        em = JPAUtil.getEntityManager();
 
         em.merge(conta);//Passou a ser gerenciada pela JPA (Managed).
 
@@ -39,7 +37,7 @@ public class TesteConta {
         em.close();
         //Novamente, o objeto deixa de ser Managed e passa a ser Detached.
 
-        em = emf.createEntityManager();
+        em = JPAUtil.getEntityManager();
 
         conta = em.find(Conta.class, conta.getId());//Novamente, o objeto passa de Detached para Managed.
 
@@ -48,7 +46,6 @@ public class TesteConta {
         em.getTransaction().commit();
 
         em.close();
-        emf.close();
 
     }
 }
