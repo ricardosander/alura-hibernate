@@ -1,9 +1,6 @@
 package br.com.ricardosander.financas.modelo;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Cliente {
@@ -17,6 +14,10 @@ public class Cliente {
     private String endereco;
 
     private String profissao;
+
+    @JoinColumn(unique = true)
+    @OneToOne
+    private Conta conta;
 
     public Integer getId() {
         return id;
@@ -48,6 +49,14 @@ public class Cliente {
 
     public void setProfissao(String profissao) {
         this.profissao = profissao;
+    }
+
+    public Conta getConta() {
+        return conta;
+    }
+
+    public void setConta(Conta conta) {
+        this.conta = conta;
     }
 
 }
