@@ -8,6 +8,7 @@
 
         <!--  Aqui são listadas todas as entidades  -->
         <class>br.com.ricardosander.financas.modelo.Conta</class>
+        <class>br.com.ricardosander.financas.modelo.Movimentacao</class>
 
         <properties>
 
