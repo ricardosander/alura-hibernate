@@ -3,6 +3,7 @@ package br.com.ricardosander.financas.modelo;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.List;
 
 @Entity
 public class Movimentacao {
@@ -20,6 +21,9 @@ public class Movimentacao {
     private Calendar data;
 
     private String descricao;
+
+    @ManyToMany
+    private List<Categoria> categorias;
 
     @ManyToOne
     private Conta conta;
@@ -70,5 +74,9 @@ public class Movimentacao {
 
     public void setConta(Conta conta) {
         this.conta = conta;
+    }
+
+    public void setCategorias(List<Categoria> categorias) {
+        this.categorias = categorias;
     }
 }
