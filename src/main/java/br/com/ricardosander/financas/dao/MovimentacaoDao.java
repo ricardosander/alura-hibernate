@@ -7,6 +7,8 @@ import br.com.ricardosander.financas.modelo.TipoMovimentacao;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class MovimentacaoDao {
@@ -34,5 +36,33 @@ public class MovimentacaoDao {
         query1.setParameter("pCategoria", categoria);
 
         return query1.getResultList();
+    }
+
+    public BigDecimal sum() {
+
+        TypedQuery<BigDecimal> totalMovimentacoes = entityManager.createNamedQuery("totalMovimentacoes", BigDecimal.class);
+
+        return totalMovimentacoes.getSingleResult();
+    }
+
+    public BigDecimal max() {
+
+        TypedQuery<BigDecimal> totalMovimentacoes = entityManager.createNamedQuery("maximoMovimentacoes", BigDecimal.class);
+
+        return totalMovimentacoes.getSingleResult();
+    }
+
+    public BigDecimal min() {
+
+        TypedQuery<BigDecimal> totalMovimentacoes = entityManager.createNamedQuery("minimoMovimentacoes", BigDecimal.class);
+
+        return totalMovimentacoes.getSingleResult();
+    }
+
+    public Double average() {
+
+        TypedQuery<Double> totalMovimentacoes = entityManager.createNamedQuery("mediaMovimentacoes", Double.class);
+
+        return totalMovimentacoes.getSingleResult();
     }
 }

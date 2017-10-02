@@ -5,6 +5,12 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.List;
 
+@NamedQueries({
+        @NamedQuery(name = "totalMovimentacoes", query = "select sum(m.valor) from Movimentacao m"),
+        @NamedQuery(name = "mediaMovimentacoes", query = "select avg(m.valor) from Movimentacao m"),
+        @NamedQuery(name = "minimoMovimentacoes", query = "select min(m.valor) from Movimentacao m"),
+        @NamedQuery(name = "maximoMovimentacoes", query = "select max(m.valor) from Movimentacao m")
+})
 @Entity
 public class Movimentacao {
 
