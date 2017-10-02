@@ -1,22 +1,20 @@
 package br.com.ricardosander.financas.testes;
 
+import br.com.ricardosander.financas.dao.ContaDao;
 import br.com.ricardosander.financas.modelo.Conta;
 import br.com.ricardosander.financas.util.JPAUtil;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.List;
 
 public class TesteJPARelatorio {
 
     public static void main(String[] args) {
 
-        String jpql = "select distinct c from Conta c left join fetch c.movimentacoes ";
-
         EntityManager em = JPAUtil.getEntityManager();
+        ContaDao contaDao = new ContaDao(em);
 
-        Query query = em.createQuery(jpql);
-        List<Conta> resultList = query.getResultList();
+        List<Conta> resultList = contaDao.findAll();
 
         resultList.forEach(c -> {
             System.out.println("Id:" + c.getId());
@@ -26,13 +24,14 @@ public class TesteJPARelatorio {
 
             System.out.println("Movimentações:");
             c.getMovimentacoes().forEach(m -> {
-                System.out.println("Movimentação: " + m.getDescricao());
-                System.out.println("Valor: " + m.getValor());
-            }
+                        System.out.println("Movimentação: " + m.getDescricao());
+                        System.out.println("Valor: " + m.getValor());
+                    }
             );
 
             System.out.println("\n\n\n");
         });
 
+        em.close();
     }
 }

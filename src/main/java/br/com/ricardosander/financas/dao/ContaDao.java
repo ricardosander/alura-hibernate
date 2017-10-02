@@ -1,8 +1,11 @@
 package br.com.ricardosander.financas.dao;
 
 import br.com.ricardosander.financas.modelo.Conta;
+import br.com.ricardosander.financas.util.JPAUtil;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.List;
 
 public class ContaDao {
 
@@ -35,5 +38,16 @@ public class ContaDao {
         entityManager.getTransaction().begin();
         entityManager.remove(conta);
         entityManager.getTransaction().commit();
+    }
+
+    public List<Conta> findAll() {
+
+        String jpql = "select distinct c from Conta c left join fetch c.movimentacoes ";
+
+        EntityManager em = JPAUtil.getEntityManager();
+
+        Query query = em.createQuery(jpql);
+
+        return query.getResultList();
     }
 }
