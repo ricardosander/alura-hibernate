@@ -1,5 +1,6 @@
 package br.com.ricardosander.financas.testes;
 
+import br.com.ricardosander.financas.dao.MovimentacaoDao;
 import br.com.ricardosander.financas.modelo.Conta;
 import br.com.ricardosander.financas.modelo.Movimentacao;
 import br.com.ricardosander.financas.modelo.TipoMovimentacao;
@@ -11,7 +12,10 @@ import java.util.Calendar;
 
 public class TesteJPARelacionamento {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
+
+        EntityManager em = JPAUtil.getEntityManager();
+        MovimentacaoDao movimentacaoDao = new MovimentacaoDao(em);
 
         Conta conta = new Conta();
         conta.setTitular("Ricardo Sander");
@@ -19,20 +23,15 @@ public class TesteJPARelacionamento {
         conta.setBanco("Qualquer");
         conta.setNumero("789");
 
-        Movimentacao m1 = new Movimentacao();
-        m1.setConta(conta);
-        m1.setData(Calendar.getInstance());
-        m1.setDescricao("Churrascaria");
-        m1.setTipo(TipoMovimentacao.Saida);
-        m1.setValor(new BigDecimal("60.78"));
+        Movimentacao movimentacao = new Movimentacao();
+        movimentacao.setConta(conta);
+        movimentacao.setData(Calendar.getInstance());
+        movimentacao.setDescricao("Churrascaria");
+        movimentacao.setTipo(TipoMovimentacao.Saida);
+        movimentacao.setValor(new BigDecimal("60.78"));
 
-        EntityManager entityManager = JPAUtil.getEntityManager();
+        movimentacaoDao.save(movimentacao);
 
-        entityManager.getTransaction().begin();
-        entityManager.persist(conta);
-        entityManager.persist(m1);
-        entityManager.getTransaction().commit();
-
-        entityManager.close();
+        em.close();
     }
 }
