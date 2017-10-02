@@ -1,5 +1,6 @@
 package br.com.ricardosander.financas.testes;
 
+import br.com.ricardosander.financas.dao.ContaDao;
 import br.com.ricardosander.financas.modelo.Conta;
 import br.com.ricardosander.financas.util.JPAUtil;
 
@@ -9,6 +10,9 @@ public class TesteConta {
 
     public static void main(String[] args) {
 
+        EntityManager em = JPAUtil.getEntityManager();
+        ContaDao contaDao = new ContaDao(em);
+
         //Novo objeto e sem id, então é Transient, ou seja, não gerenciado pela JPA.
         Conta conta = new Conta();
         conta.setAgencia("123");
@@ -16,11 +20,7 @@ public class TesteConta {
         conta.setBanco("001");
         conta.setTitular("Ricardo");
 
-        EntityManager em = JPAUtil.getEntityManager();
-
-        em.getTransaction().begin();
-        em.persist(conta);//Passou a ser gerenciado pela JPA (Managed).
-        em.getTransaction().commit();
+        contaDao.save(conta);//Passou a ser gerenciado pela JPA (Managed).
 
         em.close();
 
@@ -28,22 +28,20 @@ public class TesteConta {
         conta.setTitular("Ricardo Lopes");
 
         em = JPAUtil.getEntityManager();
+        contaDao = new ContaDao(em);
 
-        em.merge(conta);//Passou a ser gerenciada pela JPA (Managed).
+        contaDao.merge(conta);//Passou a ser gerenciada pela JPA (Managed).
 
-        em.getTransaction().begin();
-        em.getTransaction().commit();
+        contaDao.update();
 
-        em.close();
-        //Novamente, o objeto deixa de ser Managed e passa a ser Detached.
+        em.close();//Novamente, o objeto deixa de ser Managed e passa a ser Detached.
 
         em = JPAUtil.getEntityManager();
+        contaDao = new ContaDao(em);
 
-        conta = em.find(Conta.class, conta.getId());//Novamente, o objeto passa de Detached para Managed.
+        conta = contaDao.find(conta.getId());//Novamente, o objeto passa de Detached para Managed.
 
-        em.getTransaction().begin();
-        em.remove(conta);
-        em.getTransaction().commit();
+        contaDao.remove(conta);
 
         em.close();
 

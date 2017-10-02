@@ -16,8 +16,24 @@ public class ContaDao {
         return entityManager.find(Conta.class, id);
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        entityManager.close();
+    public void save(Conta conta) {
+        entityManager.getTransaction().begin();
+        entityManager.persist(conta);//Passou a ser gerenciado pela JPA (Managed).
+        entityManager.getTransaction().commit();
+    }
+
+    public void merge(Conta conta) {
+        entityManager.merge(conta);
+    }
+
+    public void update() {
+        entityManager.getTransaction().begin();
+        entityManager.getTransaction().commit();
+    }
+
+    public void remove(Conta conta) {
+        entityManager.getTransaction().begin();
+        entityManager.remove(conta);
+        entityManager.getTransaction().commit();
     }
 }
