@@ -5,11 +5,14 @@ import br.com.ricardosander.financas.modelo.Cliente;
 import br.com.ricardosander.financas.modelo.Conta;
 import br.com.ricardosander.financas.util.JPAUtil;
 
+import javax.persistence.EntityManager;
+
 public class TestaContaCliente {
 
     public static void main(String[] args) {
 
-        ClienteDao clienteDao = new ClienteDao(JPAUtil.getEntityManager());
+        EntityManager em = JPAUtil.getEntityManager();
+        ClienteDao clienteDao = new ClienteDao(em);
 
         Conta conta = new Conta();
         conta.setId(2);
@@ -21,5 +24,7 @@ public class TestaContaCliente {
         cliente.setConta(conta);
 
         clienteDao.save(cliente);
+
+        em.close();
     }
 }
