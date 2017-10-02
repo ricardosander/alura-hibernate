@@ -1,5 +1,8 @@
 package br.com.ricardosander.financas.testes;
 
+import br.com.ricardosander.financas.dao.CategoriaDao;
+import br.com.ricardosander.financas.dao.ContaDao;
+import br.com.ricardosander.financas.dao.MovimentacaoDao;
 import br.com.ricardosander.financas.modelo.Categoria;
 import br.com.ricardosander.financas.modelo.Conta;
 import br.com.ricardosander.financas.modelo.Movimentacao;
@@ -14,6 +17,12 @@ import java.util.Calendar;
 public class TesteMovimentacoesComCategoria {
 
     public static void main(String[] args) {
+
+        EntityManager em = JPAUtil.getEntityManager();
+
+        CategoriaDao categoriaDao = new CategoriaDao(em);
+        ContaDao contaDao = new ContaDao(em);
+        MovimentacaoDao movimentacaoDao = new MovimentacaoDao(em);
 
         Categoria categoria1 = new Categoria("Viagem");
         Categoria categoria2 = new Categoria("Negócios");
@@ -41,20 +50,12 @@ public class TesteMovimentacoesComCategoria {
         movimentacao2.setConta(conta);
         movimentacao2.setCategorias(Arrays.asList(categoria1, categoria2));
 
-        EntityManager entityManager = JPAUtil.getEntityManager();
+        contaDao.merge(conta);
+        categoriaDao.save(categoria1);
+        categoriaDao.save(categoria2);
+        movimentacaoDao.save(movimentacao1);
+        movimentacaoDao.save(movimentacao2);
 
-        entityManager.getTransaction().begin();
-
-        entityManager.merge(conta);
-
-        entityManager.persist(categoria1);
-        entityManager.persist(categoria2);
-
-        entityManager.persist(movimentacao1);
-        entityManager.persist(movimentacao2);
-
-        entityManager.getTransaction().commit();
-
-        entityManager.close();
+        em.close();
     }
 }

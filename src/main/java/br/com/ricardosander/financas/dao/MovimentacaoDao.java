@@ -19,7 +19,6 @@ public class MovimentacaoDao {
 
     public void save(Movimentacao movimentacao) {
         entityManager.getTransaction().begin();
-        entityManager.persist(movimentacao.getConta());
         entityManager.persist(movimentacao);
         entityManager.getTransaction().commit();
     }

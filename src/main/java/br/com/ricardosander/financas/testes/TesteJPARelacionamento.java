@@ -1,5 +1,6 @@
 package br.com.ricardosander.financas.testes;
 
+import br.com.ricardosander.financas.dao.ContaDao;
 import br.com.ricardosander.financas.dao.MovimentacaoDao;
 import br.com.ricardosander.financas.modelo.Conta;
 import br.com.ricardosander.financas.modelo.Movimentacao;
@@ -15,6 +16,7 @@ public class TesteJPARelacionamento {
     public static void main(String[] args) {
 
         EntityManager em = JPAUtil.getEntityManager();
+        ContaDao contaDao = new ContaDao(em);
         MovimentacaoDao movimentacaoDao = new MovimentacaoDao(em);
 
         Conta conta = new Conta();
@@ -30,6 +32,7 @@ public class TesteJPARelacionamento {
         movimentacao.setTipo(TipoMovimentacao.Saida);
         movimentacao.setValor(new BigDecimal("60.78"));
 
+        contaDao.save(conta);
         movimentacaoDao.save(movimentacao);
 
         em.close();
